@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>💖 Anniversary with Love & Memories 💖</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Reset and basics */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #ffe6f0 0%, #ffcce0 100%);
+      color: #4d004d;
+      text-align: center;
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    /* Titles */
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: #cc0066;
+      cursor: pointer;
+      user-select: none;
+    }
+    .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    .date, .days, .countdown {
+      font-size: 1.4rem;
+      margin-top: 15px;
+    }
+    .days span, .countdown span {
+      color: #ff3399;
+      font-weight: bold;
+    }
+    .heart {
+      font-size: 4rem;
+      animation: beat 1.5s infinite;
+      margin-top: 20px;
+      color: red;
+    }
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    /* Slideshow */
+    .slideshow-container {
+      max-width: 400px;
+      margin: 30px auto 10px;
+      position: relative;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      overflow: hidden;
+      background: white;
+    }
+    .slide {
+      display: none;
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 15px;
+    }
+    .active-slide {
+      display: block;
+    }
+    .nav-buttons {
+      margin-top: 10px;
+    }
+    .nav-buttons button {
+      background: #ff66a3;
+      border: none;
+      color: white;
+      padding: 8px 15px;
+      margin: 0 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .nav-buttons button:hover {
+      background: #e60073;
+    }
+
+    /* Timeline */
+    .timeline {
+      max-width: 600px;
+      margin: 40px auto;
+      position: relative;
+      padding-left: 40px;
+      text-align: left;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 18px;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #ff66a3;
+      border-radius: 2px;
+    }
+    .event {
+      position: relative;
+      margin-bottom: 25px;
+    }
+    .event:last-child {
+      margin-bottom: 0;
+    }
+    .event::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 5px;
+      width: 24px;
+      height: 24px;
+      background: #cc0066;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #cc0066;
+    }
+    .event-date {
+      font-weight: bold;
+      color: #cc0066;
+      margin-bottom: 5px;
+    }
+    .event-desc {
+      color: #4d004d;
+    }
+
+    /* Love Message */
+    .love-message {
+      margin-top: 30px;
+      font-size: 1.15rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.8;
+      color: #800040;
+    }
+
+    /* Music Control */
+    #music-control {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #ff66a3;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(230, 0, 115, 0.6);
+      font-weight: bold;
+      z-index: 10000;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    #music-control:hover {
+      background: #e60073;
+    }
+
+    /* Animation container for stars/hearts */
+    #animation-container {
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: visible;
+      z-index: 9999;
+    }
+
+    .star, .heart-burst {
+      position: absolute;
+      pointer-events: none;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+    }
+
+    .star {
+      color: #ff66a3;
+      font-size: 20px;
+      animation-name: star-fall;
+      animation-duration: 1.2s;
+    }
+
+    @keyframes star-fall {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(100px) scale(0.3);
+      }
+    }
+
+    .heart-burst {
+      font-size: 30px;
+      color: #e60073;
+      animation-name: heart-pop;
+      animation-duration: 0.6s;
+    }
+    @keyframes heart-pop {
+      0% {
+        opacity: 1;
+        transform: scale(0.5);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0);
+      }
+    }
+
+    /* Responsive */
+    @media(max-width: 600px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      .date, .days, .countdown {
+        font-size: 1.1rem;
+      }
+      .slideshow-container {
+        max-width: 90vw;
+        height: auto;
+      }
+      .slide {
+        height: 200px;
+      }
+      .love-message, .timeline {
+        padding: 0 15px;
+        font-size: 1rem;
+      }
+      .nav-buttons button {
+        padding: 6px 12px;
+        margin: 0 5px;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Password Screen */
+    #password-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #ffccdd;
+      color: #4d004d;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100000;
+      font-family: 'Quicksand', sans-serif;
+    }
+    #password-screen input {
+      padding: 10px;
+      font-size: 1.2rem;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 2px solid #ff99cc;
+      width: 200px;
+      text-align: center;
+    }
+    #password-screen button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 20px;
+      background: #ff66a3;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    #password-screen button:hover {
+      background: #e60073;
+    }
+    #password-screen p {
+      color: red;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Password Screen -->
+  <div id="password-screen">
+    <h2>Enter Love Password 💗</h2>
+    <input type="password" id="password" placeholder="" />
+    <button onclick="checkPassword()">Enter</button>
+    <p id="error"></p>
+  </div>
+
+  <!-- Music Control -->
+  <button id="music-control" aria-label="Toggle Music">🔈 Music On</button>
+
+  <!-- Title and info -->
+  <h1 id="title">💖 Love Anniversary 💖</h1>
+  <div class="subtitle">Celebrating our love journey together</div>
+  <div class="date">Started on: <strong>14 December 2024</strong></div>
+  <div class="days">We’ve been in love for <span id="day-count"></span> days 🥰</div>
+  <div class="countdown">Next Anniversary in <span id="countdown"></span></div>
+  <div class="heart">💘</div>
+
+  <!-- Slideshow -->
+  <div class="slideshow-container" aria-label="Photo slideshow">
+    <img src="img/A.jpg" alt="Love photo 1" class="slide active-slide" />
+    <img src="img/b.jpg" alt="Love photo 2" class="slide" />
+    <img src="img/c.jpg" alt="Love photo 3" class="slide" />
+    <img src="img/d.jpg" alt="Love photo 4" class="slide" />
+  </div>
+  <div class="nav-buttons">
+    <button id="prev-slide">Previous</button>
+    <button id="next-slide">Next</button>
+  </div>
+
+  <!-- Love story -->
+  <div class="love-message">
+    From the first day we met, something magical began.<br />
+    Through smiles, laughter, and even a few tears,<br />
+    we’ve walked together in love and strength.<br />
+    Each day is more beautiful than the last — because of you.<br />
+    I’m grateful for every moment we share.<br />
+    Let’s keep building memories forever 💖
+           Love you so much!!!
+  </div>
+
+  
+  <!-- Animation container -->
+  <div id="animation-container"></div>
+
+  <!-- Audio -->
+  <audio id="bg-music" loop>
+    <source src="mp3/ឋតថរ - Noly Record (speed up  Lyrics).mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    // Password protect
+    function checkPassword() {
+      const input = document.getElementById("password").value.trim();
+      const correctPassword = "141224";
+      const error = document.getElementById("error");
+      if (input === correctPassword) {
+        document.getElementById("password-screen").style.display = "none";
+        music.play();
+      } else {
+        error.textContent = "Wrong password! Please try again.";
+      }
+    }
+
+    // Music control
+    const music = document.getElementById('bg-music');
+    const musicControl = document.getElementById('music-control');
+
+    musicControl.addEventListener('click', () => {
+      if (music.paused) {
+        music.play();
+        musicControl.textContent = '🔈 Music On';
+      } else {
+        music.pause();
+        musicControl.textContent = '🔇 Music Off';
+      }
+    });
+
+    // Initial music on
+    music.volume = 0.3;
+    music.play().catch(() => {
+      // Autoplay might be blocked by browser, user can click music button to enable
+      musicControl.textContent = '🔇 Music Off';
+    });
+
+    // Love days count
+    const loveStartDate = new Date("2024-12-14");
+    function updateDays() {
+      const today = new Date();
+      const diffTime = today - loveStartDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById("day-count").textContent = diffDays > 0 ? diffDays : 0;
+    }
+    updateDays();
+
+    // Countdown next anniversary
+    function updateCountdown() {
+      const today = new Date();
+      let thisYear = today.getFullYear();
+      let nextAnniv = new Date(`${thisYear}-12-14`);
+      if (today > nextAnniv) {
+        nextAnniv = new Date(`${thisYear + 1}-12-14`);
+      }
+      const diffTime = nextAnniv - today;
+      const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById("countdown").textContent = daysLeft + " days";
+    }
+    updateCountdown();
+
+    // Update days and countdown every hour
+    setInterval(() => {
+      updateDays();
+      updateCountdown();
+    }, 3600000);
+
+    // Slideshow logic
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active-slide', i === index);
+      });
+    }
+
+    document.getElementById('prev-slide').addEventListener('click', () => {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      showSlide(currentSlide);
+    });
+    document.getElementById('next-slide').addEventListener('click', () => {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      showSlide(currentSlide);
+    });
+
+    // Auto slideshow every 4 seconds
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      showSlide(currentSlide);
+    }, 4000);
+
+    // Animation stars and hearts on title click
+    const animationContainer = document.getElementById('animation-container');
+    const title = document.getElementById('title');
+
+    function createStar(x, y) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.left = `${x}px`;
+      star.style.top = `${y}px`;
+      animationContainer.appendChild(star);
+      setTimeout(() => star.remove(), 1200);
+    }
+
+    function createHeart(x, y) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart-burst');
+      heart.style.left = `${x - 15}px`;
+      heart.style.top = `${y - 15}px`;
+      animationContainer.appendChild(heart);
+      setTimeout(() => heart.remove(), 600);
+    }
+
+    title.addEventListener('click', (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+
+      // Create multiple stars around click
+      for(let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          createStar(x + (Math.random() * 40 - 20), y + (Math.random() * 40 - 20));
+        }, i * 100);
+      }
+      createHeart(x, y);
+    });
+  </script>
+
+</body>
+</html>
